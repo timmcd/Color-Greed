@@ -39,7 +39,7 @@ function Window:draw(...)
    self.headerSize = {10, self.size[2]}
    self.headerPosition = {self.position[1] + 10, self.position[2]}
    
-   self.love.graphics.rectangle("line", unpack(self.headerPosition), unpack(self.headerSize))
-   self.love.graphics.rectangle("fill", unpack(self.position), unpack(self.size))
+   self.love.graphics.rectangle(self.love.graphics.line, unpack(self.headerPosition), unpack(self.headerSize))
+   self.love.graphics.rectangle(self.love.graphics.fill, unpack(self.position), unpack(self.size))
    
 end
