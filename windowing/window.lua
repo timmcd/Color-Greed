@@ -38,13 +38,24 @@ function Window.new(args)
    return i
 end
 
-function Window:_update(dt)
-   if love.mouse.isDown("l") then
-      if love.mouse.getX() > self.headerPosition[1] and love.mouse.getX() < self.headerSize[1] and love.mouse.getY() > self.headerPosition[2] and love.mouse.getY() < self.headerSize[2] then
-	 self.position[1], self.position[2] = love.mouse.getPosition()
-      end
+function Window._dragNdrop(x, y, sizex, sizey)
+
+   sizex = sizex + x
+   sizey = sizey + y
+
+   if love.mouse.getX() >= x and love.mouse.getX() <= sizex and
+      love.mouse.getY() >= y and love.mouse.getY() <= sizey then
+      --
+      return true
    end
-	 
+   
+end
+
+function Window:_update(dt)
+
+   if Window._dragNdrop(self.position[1], self.position[2], self.size[1], self.size[2]) and love.mouse.isDown("l") then
+      self.position[1], self.position[2] = love.mouse.getPosition()
+   end
 
    self:content_update(dt)
 
