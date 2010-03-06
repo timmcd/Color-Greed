@@ -8,7 +8,6 @@ Window = {
 }
 
 function Window:new(args)
-   self.love = args.loveLib
 
    if args.color then
       self.color = args.color
@@ -29,17 +28,14 @@ function Window:new(args)
    return self
 end
 
-function Window:draw(...)
-   if arg[1] then
-      self.position = {arg[1], arg[2]}
-   end
+function Window:draw()
 
-   color = self.love.graphics.setColor(self.color[1], self.color[2], self.color[3], self.color[4])
+   color = love.graphics.setColor(self.color[1], self.color[2], self.color[3], self.color[4])
 
    self.headerSize = {10, self.size[2]}
-   self.headerPosition = {self.position[1] + 10, self.position[2]}
+   self.headerPosition = {self.position[1], self.position[2] - 10}
    
-   self.love.graphics.rectangle("line", self.headerPosition[1], self.headerPosition[2], self.headerSize[1]+self.headerPosition[1], self.headerSize[2]+self.headerPosition[2])
-   self.love.graphics.rectangle("fill", self.position[1], self.position[2], self.size[1]+self.position[1], self.size[2]+self.position[2])
+   love.graphics.rectangle("line", self.headerPosition[1], self.headerPosition[2], self.headerSize[1]+self.headerPosition[1], self.headerSize[2]+self.headerPosition[2])
+   love.graphics.rectangle("fill", self.position[1], self.position[2], self.size[1]+self.position[1], self.size[2]+self.position[2])
    
 end
