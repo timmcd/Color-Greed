@@ -14,7 +14,7 @@ function love.load()
 end
 
 function love.update(dt)
-   window:update()
+   window:update(dt)
 end
 
 function love.draw()

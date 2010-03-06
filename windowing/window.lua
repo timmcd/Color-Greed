@@ -13,9 +13,10 @@ function Window.new(args)
       draw = Window._draw,
       update = Window._update,
       content_draw = function (self)
-      end,
-      content_update = function (self)
-      end
+		     end,
+      content_update = function (self, dt)
+		       end,
+      content = {}
    }
 
    if args.color then
@@ -37,9 +38,15 @@ function Window.new(args)
    return i
 end
 
-function Window:_update()
+function Window:_update(dt)
+   if love.mouse.isDown("l") then
+      if love.mouse.getX() > self.headerPosition[1] and love.mouse.getX() < self.headerSize[1] and love.mouse.getY() > self.headerPosition[2] and love.mouse.getY() < self.headerSize[2] then
+	 self.position[1], self.position[2] = love.mouse.getPosition()
+      end
+   end
+	 
 
-   self:content_update()
+   self:content_update(dt)
 
 end
 
@@ -64,4 +71,12 @@ function Window:_draw()
 
    self:content_draw()
    
+end
+
+function Window:content_draw()
+   for i,v in ipairs(self.content) do
+      x = v.position[1] + self.position[1]
+      y = v.position[2] + self.position[2]
+      v.draw(x, y)
+   end
 end
