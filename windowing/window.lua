@@ -12,11 +12,15 @@ function Window.new(args)
       size = {500, 500},
       draw = Window._draw,
       update = Window._update,
+      mousedown = Window._mousedown,
+      mouseup = Window._mouseup,
       content_draw = function (self)
 		     end,
       content_update = function (self, dt)
 		       end,
-      content = {}
+      content = {},
+      mo = {0, 0},
+      ontarget = false
    }
 
    if args.color then
@@ -53,8 +57,10 @@ end
 
 function Window:_update(dt)
 
-   if Window._dragNdrop(self.position[1], self.position[2], self.size[1], self.size[2]) and love.mouse.isDown("l") then
-      self.position[1], self.position[2] = love.mouse.getPosition()
+   local mp = {love.mouse.getPosition()}
+
+   if self.ontarget then
+      self.position[1], self.position[2] = mp[1]+self.mo[1], mp[2]+self.mo[2]
    end
 
    self:content_update(dt)
@@ -84,10 +90,17 @@ function Window:_draw()
    
 end
 
-function Window:content_draw()
-   for i,v in ipairs(self.content) do
-      x = v.position[1] + self.position[1]
-      y = v.position[2] + self.position[2]
-      v.draw(x, y)
+function Window:_mousedown(x, y, button)
+   if button == 'l'
+         and x >= self.headerPosition[1]
+         and y >= self.headerPosition[2]
+         and x <= self.headerPosition[1]+self.headerSize[1]
+         and y <= self.headerPosition[2]+self.headerSize[2] then
+      self.mo = {self.position[1]-x, self.position[2]-y}
+      self.ontarget = true
    end
+end
+
+function Window:_mouseup(x, y, button)
+   if button == 'l' and self.ontarget then self.ontarget = false end
 end

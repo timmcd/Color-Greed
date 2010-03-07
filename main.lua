@@ -20,3 +20,11 @@ end
 function love.draw()
    window:draw()
 end
+
+function love.mousepressed(x, y, button)
+   window:mousedown(x, y, button)
+end
+
+function love.mousereleased(x, y, button)
+   window:mouseup(x, y, button)
+end
