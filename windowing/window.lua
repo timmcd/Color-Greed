@@ -6,7 +6,9 @@ Window = {}
 function Window.new(args)
 
    local i = {
-      position = {0, 0},
+	x = 0,
+	y = 0,
+	scale = {1, 1},
       color = {255, 255, 255, 255},
       caption = "PLACE HOLDER",
       size = {500, 500},
@@ -28,7 +30,7 @@ function Window.new(args)
    end
 
    if args.position then
-      i.position = args.position
+	i.x, i.y = unpack(args.position)
    end
 
    if args.size then
@@ -60,7 +62,7 @@ function Window:_update(dt)
    local mp = {love.mouse.getPosition()}
 
    if self.ontarget then
-      self.position[1], self.position[2] = mp[1]+self.mo[1], mp[2]+self.mo[2]
+      self.x, self.y = mp[1]+self.mo[1], mp[2]+self.mo[2]
    end
 
    self:content_update(dt)
@@ -70,23 +72,28 @@ end
 function Window:_draw()
 
    self.headerSize = {self.size[1], 24}
-   self.headerPosition = {self.position[1], self.position[2] - self.headerSize[2]}
+   self.headerPosition = {self.x, self.y - self.headerSize[2]}
+
+	love.graphics.push()
+	love.graphics.scale(unpack( self.scale ))
    
    love.graphics.setLineWidth(2)
    love.graphics.setLineStyle('smooth')
 
    love.graphics.setColor(unpack(self.color))
-   love.graphics.rectangle("line", self.headerPosition[1], self.headerPosition[2], self.headerSize[1], self.headerSize[2])
+   love.graphics.rectangle("line", self.headerPosition[1]/self.scale[2], self.headerPosition[2]/self.scale[2], self.headerSize[1], self.headerSize[2]/self.scale[2])
    love.graphics.setColor(0,0,0,255)
-   love.graphics.rectangle("fill", self.headerPosition[1], self.headerPosition[2], self.headerSize[1], self.headerSize[2])
+   love.graphics.rectangle("fill", self.headerPosition[1]/self.scale[2], self.headerPosition[2]/self.scale[2], self.headerSize[1], self.headerSize[2]/self.scale[2])
    love.graphics.setColor(unpack(self.color))
-   love.graphics.rectangle("line", self.position[1], self.position[2], self.size[1], self.size[2])
-   love.graphics.rectangle("fill", self.position[1], self.position[2], self.size[1], self.size[2])
+   love.graphics.rectangle("line", self.x/self.scale[2], self.y/self.scale[2], self.size[1], self.size[2])
+   love.graphics.rectangle("fill", self.x/self.scale[2], self.y/self.scale[2], self.size[1], self.size[2])
+
+	self:content_draw()
+	
+	love.graphics.pop()
 
    love.graphics.setColor(255,255,255,255)
-   love.graphics.print(self.caption, self.headerPosition[1]+8, self.headerPosition[2]+15)
-
-   self:content_draw()
+   love.graphics.printf(self.caption, self.headerPosition[1]+8, self.headerPosition[2]+15, self.headerSize[1]*self.scale[1], "left")
    
 end
 
@@ -96,7 +103,7 @@ function Window:_mousedown(x, y, button)
          and y >= self.headerPosition[2]
          and x <= self.headerPosition[1]+self.headerSize[1]
          and y <= self.headerPosition[2]+self.headerSize[2] then
-      self.mo = {self.position[1]-x, self.position[2]-y}
+      self.mo = {self.x-x, self.y-y}
       self.ontarget = true
    end
 end

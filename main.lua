@@ -1,4 +1,4 @@
-require("windowing/window.lua")
+require( "windowing/window.lua" )
 
 window = nil
 
@@ -9,7 +9,8 @@ function love.load()
    -- -- position = { x, y }
    window = Window.new{ color = { 255, 255, 0, 255 }, caption = "Teh Window!" }
    -- Set the position
-   window.position = {24, 30}
+   window.x, window.y = 24, 30
+	window.scale = {.1, .1}
    print(window.draw, Window.draw)
 end
 
