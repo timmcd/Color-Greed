@@ -10,7 +10,6 @@ function love.load()
    window = Window.new{ color = { 255, 255, 0, 255 }, caption = "Teh Window!" }
    -- Set the position
    window.x, window.y = 24, 30
-	window.scale = {.1, .1}
    print(window.draw, Window.draw)
 end
 

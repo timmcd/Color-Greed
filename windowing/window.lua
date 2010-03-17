@@ -22,7 +22,7 @@ function Window.new(args)
 		       end,
       content = {},
       mo = {0, 0},
-      ontarget = false
+      ontarget = false,
    }
 
    if args.color then
@@ -74,23 +74,18 @@ function Window:_draw()
    self.headerSize = {self.size[1], 24}
    self.headerPosition = {self.x, self.y - self.headerSize[2]}
 
-	love.graphics.push()
-	love.graphics.scale(unpack( self.scale ))
-   
    love.graphics.setLineWidth(2)
    love.graphics.setLineStyle('smooth')
 
    love.graphics.setColor(unpack(self.color))
-   love.graphics.rectangle("line", self.headerPosition[1]/self.scale[2], self.headerPosition[2]/self.scale[2], self.headerSize[1], self.headerSize[2]/self.scale[2])
+   love.graphics.rectangle("line", self.headerPosition[1], self.headerPosition[2], self.headerSize[1], self.headerSize[2])
    love.graphics.setColor(0,0,0,255)
-   love.graphics.rectangle("fill", self.headerPosition[1]/self.scale[2], self.headerPosition[2]/self.scale[2], self.headerSize[1], self.headerSize[2]/self.scale[2])
+   love.graphics.rectangle("fill", self.headerPosition[1], self.headerPosition[2], self.headerSize[1], self.headerSize[2])
    love.graphics.setColor(unpack(self.color))
-   love.graphics.rectangle("line", self.x/self.scale[2], self.y/self.scale[2], self.size[1], self.size[2])
-   love.graphics.rectangle("fill", self.x/self.scale[2], self.y/self.scale[2], self.size[1], self.size[2])
+   love.graphics.rectangle("line", self.x, self.y, self.size[1], self.size[2])
+   love.graphics.rectangle("fill", self.x, self.y, self.size[1], self.size[2])
 
 	self:content_draw()
-	
-	love.graphics.pop()
 
    love.graphics.setColor(255,255,255,255)
    love.graphics.printf(self.caption, self.headerPosition[1]+8, self.headerPosition[2]+15, self.headerSize[1]*self.scale[1], "left")
@@ -105,9 +100,10 @@ function Window:_mousedown(x, y, button)
          and y <= self.headerPosition[2]+self.headerSize[2] then
       self.mo = {self.x-x, self.y-y}
       self.ontarget = true
-   end
+	end
 end
 
 function Window:_mouseup(x, y, button)
    if button == 'l' and self.ontarget then self.ontarget = false end
+	if button == 'l' and self.toscale then self.toscale = false end
 end
